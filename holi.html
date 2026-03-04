@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NitteBot 🎨</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #ff4e50, #f9d423, #24c6dc);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .chatbox {
+        width: 360px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .header {
+        background: #ff4081;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .chat {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+    }
+
+    .bot, .user {
+        margin-bottom: 10px;
+        padding: 10px 14px;
+        border-radius: 15px;
+        max-width: 80%;
+        font-size: 14px;
+    }
+
+    .bot {
+        background: #f1f1f1;
+        align-self: flex-start;
+    }
+
+    .user {
+        background: #24c6dc;
+        color: white;
+        align-self: flex-end;
+        margin-left: auto;
+    }
+
+    .input-area {
+        display: flex;
+        border-top: 1px solid #ddd;
+    }
+
+    input {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        outline: none;
+        font-size: 14px;
+    }
+
+    button {
+        background: #ff4081;
+        border: none;
+        color: white;
+        padding: 0 18px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #e91e63;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="chatbox">
+    <div class="header">🎨 NitteBot</div>
+    <div class="chat" id="chat"></div>
+    <div class="input-area">
+        <input type="text" id="input" placeholder="Type here..." />
+        <button onclick="send()">➤</button>
+    </div>
+</div>
+
+<script>
+let step = 0;
+let name = "", color = "", mood = "";
+
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+
+function botMessage(text) {
+    const div = document.createElement("div");
+    div.className = "bot";
+    div.innerText = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function userMessage(text) {
+    const div = document.createElement("div");
+    div.className = "user";
+    div.innerText = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function send() {
+    if (input.value === "") return;
+
+    userMessage(input.value);
+
+    if (step === 0) {
+        name = input.value;
+        botMessage(`Nice to meet you, ${name}! 😄 Tumhara favourite Holi color kaunsa hai?`);
+        step++;
+    } 
+    else if (step === 1) {
+        color = input.value.toLowerCase();
+        botMessage("Aur Holi ka mood kaisa hai? (fun / calm / energetic)");
+        step++;
+    } 
+    else if (step === 2) {
+        mood = input.value.toLowerCase();
+        generateWish();
+        step++;
+    }
+
+    input.value = "";
+}
+
+function generateWish() {
+    const colorMeaning = {
+        red: "energy aur passion",
+        blue: "shanti aur trust",
+        yellow: "khushi aur positivity",
+        green: "growth aur freshness"
+    };
+
+    const moodLine = {
+        fun: "Iss Holi full masti aur hasi hogi 😄🎉",
+        calm: "Iss Holi sukoon aur pyare moments honge 🌸",
+        energetic: "Iss Holi dhamaka aur full energy hogi 💥🔥"
+    };
+
+    botMessage("🎊 Generating your Holi wish...");
+    setTimeout(() => {
+        botMessage(`🌈 Happy Holi ${name}!`);
+        botMessage(`Tumhara favourite color ${color} hai, jo ${colorMeaning[color] || "khushiya"} dikhata hai.`);
+        botMessage(moodLine[mood] || "Iss Holi zindagi rangon se bhar jaaye 🎨");
+        botMessage("✨ Stay colorful and happy! ✨");
+    }, 1000);
+}
+
+// Initial message
+botMessage("Hi! Main NitteBot hoon 🎨 Tumhara naam kya hai?");
+</script>
+
+</body>
+</html>
